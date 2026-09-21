@@ -1,14 +1,37 @@
 #include "Vcounter.h"
 
+void init(Vcounter &dut)
+{
+    dut.clk = 0;
+    dut.reset = 0;
+    dut.enable = 0;
+    dut.eval();
+}
+
+void clock_low(Vcounter &dut)
+{
+    dut.clk = 0;
+    dut.eval();
+}
+
+void clock_high(Vcounter &dut)
+{
+    dut.clk = 1;
+    dut.eval();
+}
+
 void tick(Vcounter &dut)
 {
-    //    printf("Tick!\n");
+    clock_low(dut);
+    clock_high(dut);
+}
 
-    dut.clk = 0;
+void reset(Vcounter& dut)
+{
+    dut.reset = 1;
+    tick(dut);
 
-    dut.eval();
-
-    dut.clk = 1;
+    dut.reset = 0;
     dut.eval();
 }
 
@@ -16,31 +39,15 @@ int main()
 {
     Vcounter dut;
 
-    // Establish initial inputs
-    dut.clk = 0;
-    dut.reset = 1;
-    dut.enable = 0;
-    dut.eval();
+    init(dut);
+    reset(dut);
+    assert(dut.count == 0);
 
-    // Clock reset
-    dut.clk = 1;
-    dut.eval();
-    dut.clk = 0;
-    dut.eval();
-
-    // Release reset and enable counting
-    dut.reset = 0;
     dut.enable = 1;
-    dut.eval();
 
-    for (int i = 0; i < 10; ++i)
-    {
-        dut.clk = 1;
-        dut.eval();
-        printf("count = %d\n", static_cast<int>(dut.count));
-        dut.clk = 0;
-        dut.eval();
-    }
+    tick(dut);
+    assert(dut.count == 1);
 
-    return 0;
+    tick(dut);
+    assert(dut.count == 2);
 }
