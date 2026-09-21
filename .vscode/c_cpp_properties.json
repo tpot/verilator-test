@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "macOS",
+            "includePath": [
+                "${workspaceFolder}/build",
+                "/opt/homebrew/opt/verilator/share/verilator/include"
+            ]
+        }
+    ],
+    "version": 4
+}
