@@ -3,11 +3,11 @@ TOP       := counter
 BUILD     := build
 SIM       := $(BUILD)/V$(TOP)
 
-$(SIM): counter.sv sim_main.cpp
+$(SIM): rtl/src/counter.sv cpp/src/sim_main.cpp
 	$(VERILATOR) \
-		--cc counter.sv \
+		--cc rtl/src/counter.sv \
 		--top-module $(TOP) \
-		--exe sim_main.cpp \
+		--exe cpp/src/sim_main.cpp \
 		--Mdir $(BUILD) \
 		--build
 
