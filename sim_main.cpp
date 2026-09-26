@@ -14,67 +14,57 @@ class Simulator
 public:
 
     // Initialise logic inputs
-    Simulator()
+    Simulator() : ctx(), dut(&ctx)
     {
-        ctx = new VerilatedContext;
-        dut = new Vcounter(ctx);
+        dut.clk = 0;
+        dut.reset = 0;
+        dut.enable = 0;
 
-        dut->clk = 0;
-        dut->reset = 0;
-        dut->enable = 0;
-
-        dut->eval();
+        dut.eval();
 
         assert(this->count() == 0);
     }
 
-    ~Simulator()
-    {
-        delete dut;
-        delete ctx;
-    }
-
     void tick()
     {
-        dut->clk = 1;
-        dut->eval();
-        ctx->timeInc(5);
+        dut.clk = 1;
+        dut.eval();
+        ctx.timeInc(5);
 
-        dut->clk = 0;
-        dut->eval();
-        ctx->timeInc(5);
+        dut.clk = 0;
+        dut.eval();
+        ctx.timeInc(5);
     }
 
     void reset()
     {
-        dut->reset = 1;
+        dut.reset = 1;
         tick();
 
-        dut->reset = 0;
-        dut->eval();
+        dut.reset = 0;
+        dut.eval();
     }
 
     void enable()
     {
-        dut->enable = 1;
-        dut->eval();
+        dut.enable = 1;
+        dut.eval();
     }
 
     void disable()
     {
-        dut->enable = 0;
-        dut->eval();
+        dut.enable = 0;
+        dut.eval();
     }
 
     uint8_t count() const
     {
-        return dut->count;
+        return dut.count;
     }
 
-    Vcounter *dut;
-
 private:
-    VerilatedContext *ctx;
+    VerilatedContext ctx;
+    Vcounter dut;
 };
 
 int main()
