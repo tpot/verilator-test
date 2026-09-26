@@ -1,3 +1,4 @@
+// A simple 8-bit counter with a clock, reset and enable inputs
 module counter (
     input  logic       clk,
     input  logic       reset,
