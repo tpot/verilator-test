@@ -69,6 +69,8 @@ private:
 
 int main()
 {
+    cout << ">>> Tests started" << endl;
+
     Simulator sim;
 
     // Counter starts at 0
@@ -100,4 +102,6 @@ int main()
     // After reset counter should be zero
     sim.reset();
     assert(sim.count() == 0);
+
+    cout << ">>> Tests completed" << endl;
 }
