@@ -45,12 +45,12 @@ fn main() {
         .expect("Could not find include dir in pkg-config output");
 
     // Build the C++ bridge
-    cxx_build::bridge("src/main.rs")
+    cxx_build::bridge("src/counter.rs")
         .include(".")
         .include(out_path)
         .include(verilator_include_dir)
         .file("src/Counter.cpp")
-        .compile("cxx-demo");
+        .compile("cxx-counter");
 
     println!("cargo::rustc-link-search=native={}", out_dir);
     println!("cargo::rustc-link-lib=static=Vcounter");
