@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 // Bridge between Rust and the verilated C++
 #[cxx::bridge]
 mod ffi {
