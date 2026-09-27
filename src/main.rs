@@ -14,13 +14,52 @@ mod ffi {
     }
 }
 
+/// Owns the C++ counter while keeping pinning inside the FFI implementation.
+pub struct Counter {
+    inner: cxx::UniquePtr<ffi::Counter>,
+}
+
+impl Counter {
+    pub fn new() -> Self {
+        Self {
+            inner: ffi::new_counter(),
+        }
+    }
+
+    pub fn tick(&mut self) {
+        self.inner.pin_mut().tick();
+    }
+
+    pub fn reset(&mut self) {
+        self.inner.pin_mut().reset();
+    }
+
+    pub fn enable(&mut self) {
+        self.inner.pin_mut().enable();
+    }
+
+    pub fn disable(&mut self) {
+        self.inner.pin_mut().disable();
+    }
+
+    pub fn count(&self) -> u8 {
+        self.inner.count()
+    }
+}
+
+impl Default for Counter {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 fn main() {
-    let mut counter = ffi::new_counter();
+    let mut counter = Counter::new();
 
     println!("initial count is {}", counter.count());
 
-    counter.pin_mut().enable();
-    counter.pin_mut().tick();
+    counter.enable();
+    counter.tick();
 
     println!("count after one tick is {}", counter.count());
 }

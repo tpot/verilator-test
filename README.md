@@ -14,22 +14,24 @@ initial count is 0
 count after one tick is 1
 ```
 
-Calling C++ from Rust is interesting, as nearly always the `this` pointer for an object is mutable since we like to mutate state a lot in C++. This leads to messy code like the below as we need to tell the Rust compiler we are modifying memory.
+CXX requires mutable methods on opaque C++ types to take `Pin<&mut T>`
+in the bridge. Pinning prevents Rust from moving the underlying C++ object
+through a mutable reference; it is more than a marker for mutation. See
+the [CXX documentation on opaque C++ types](https://cxx.rs/extern-c++.html#opaque-c-types).
+
+The Rust `Counter` wrapper owns a private `UniquePtr<ffi::Counter>` and
+exposes ordinary `&mut self` methods. Each method calls `pin_mut()` internally,
+so callers can write:
 
 ```rust
 fn main() {
-    let mut counter = ffi::new_counter();
+    let mut counter = Counter::new();
 
     println!("initial count is {}", counter.count());
 
-    counter.pin_mut().enable();
-    counter.pin_mut().tick();
+    counter.enable();
+    counter.tick();
 
     println!("count after one tick is {}", counter.count());
 }
-```
-
-Interestingly, the C++ compiler catches this during compile-time with a mismatched `const` qualifier error:
-```
-warning: verilator-test@0.1.0: src/main.rs.cc:62:21: error: cannot initialize a variable of type 'void (Counter::*)() const' with an rvalue of type 'void (Counter::*)()': different qualifiers ('const' vs unqualified)
 ```
