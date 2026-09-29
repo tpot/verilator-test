@@ -8,3 +8,6 @@ cxx = "1.0.202"
 
 [build-dependencies]
 cxx-build = "1.0.202"
+
+[dev-dependencies]
+hegeltest = "0.47.4"

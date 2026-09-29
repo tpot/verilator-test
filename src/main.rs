@@ -1,5 +1,4 @@
-mod counter;
-use counter::Counter;
+use verilator_test::Counter;
 
 fn main() {
     let mut counter = Counter::new();

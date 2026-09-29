@@ -45,7 +45,7 @@ fn main() {
         .expect("Could not find include dir in pkg-config output");
 
     // Build the C++ bridge
-    cxx_build::bridge("src/counter.rs")
+    cxx_build::bridge("src/ffi.rs")
         .include(".")
         .include(out_path)
         .include(verilator_include_dir)
@@ -57,6 +57,7 @@ fn main() {
     println!("cargo::rustc-link-lib=static=verilated");
 
     println!("cargo:rerun-if-changed=rtl/src/counter.sv");
+    println!("cargo:rerun-if-changed=src/ffi.rs");
 
     println!("cargo:rerun-if-changed=src/Counter.h");
     println!("cargo:rerun-if-changed=src/Counter.cpp");
