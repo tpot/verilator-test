@@ -39,7 +39,7 @@ impl CounterMachine {
     }
 
     #[rule]
-    fn enable(&mut self, tc: TestCase) {
+    fn enable(&mut self, _: TestCase) {
         self.dut.enable();
         self.enabled = true;
     }
