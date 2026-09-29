@@ -1,4 +1,5 @@
-use crate::ffi::ffi;
+use crate::ffi;
+
 
 pub struct Counter {
     inner: cxx::UniquePtr<ffi::Counter>,

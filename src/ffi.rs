@@ -16,3 +16,5 @@ pub(crate) mod ffi {
         fn disable(self: Pin<&mut Counter>);
     }
 }
+
+pub(crate) use ffi::*;
