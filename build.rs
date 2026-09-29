@@ -48,7 +48,9 @@ fn main() {
     cxx_build::bridge("src/ffi.rs")
         .include(".")
         .include(out_path)
-        .include(verilator_include_dir)
+        // Treat dependency headers as system headers; keep warnings for our C++.
+        .flag("-isystem")
+        .flag(verilator_include_dir)
         .file("src/Counter.cpp")
         .compile("cxx-counter");
 
